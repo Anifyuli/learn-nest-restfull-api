@@ -15,4 +15,12 @@ export class ContactValidation {
         email: z.string().min(3).max(100).email().optional(),
         phone: z.string().min(6).max(20).optional(),
     });
+
+    static readonly SEARCH: ZodType = z.object({
+        name: z.string().optional(),
+        email: z.string().optional(),
+        phone: z.string().optional(),
+        page: z.number().positive(),
+        size: z.number().positive(),
+    });
 }
