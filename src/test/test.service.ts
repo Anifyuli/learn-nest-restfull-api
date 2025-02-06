@@ -7,16 +7,18 @@ import { Contact, User } from '@prisma/client';
 export class TestService {
     constructor(private prismaService: PrismaService) {}
 
-    async getContact(): Promise<Contact> {
-        return this.prismaService.contact.findFirst({
+    async getContact(): Promise<Contact | null> {
+        const contact = await this.prismaService.contact.findFirst({
             where: {
                 username: 'test',
             },
         });
+        console.log('Fetched Contact:', contact);
+        return contact;
     }
 
     async createContact() {
-        await this.prismaService.contact.create({
+        const contact = await this.prismaService.contact.create({
             data: {
                 username: 'test',
                 first_name: 'test',
@@ -25,6 +27,7 @@ export class TestService {
                 phone: '+6281000111222',
             },
         });
+        console.log('Created Contact:', contact);
     }
 
     async deleteContact() {
@@ -52,13 +55,18 @@ export class TestService {
     }
 
     async createUser() {
-        await this.prismaService.user.create({
-            data: {
-                username: 'test',
-                name: 'test',
-                password: await bcrypt.hash('test', 10),
-                token: 'test',
-            },
+        const existingUser = await this.prismaService.user.findUnique({
+            where: { username: 'test' },
         });
+        if (!existingUser) {
+            await this.prismaService.user.create({
+                data: {
+                    username: 'test',
+                    name: 'test',
+                    password: await bcrypt.hash('test', 10),
+                    token: 'test',
+                },
+            });
+        }
     }
 }
