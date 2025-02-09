@@ -6,7 +6,13 @@ import { ContactModule } from './contact/contact.module';
 import { AddressModule } from './address/address.module';
 
 @Module({
-    imports: [CommonModule, UserModule, TestModule, ContactModule, AddressModule],
+    imports: [
+        CommonModule,
+        UserModule,
+        TestModule,
+        ContactModule,
+        AddressModule,
+    ],
     controllers: [],
     providers: [],
 })
